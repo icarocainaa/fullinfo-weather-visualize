@@ -1,0 +1,105 @@
+﻿<div class="panel-shell">
+  @if (selectedStation(); as station) {
+  <section class="panel-section station-section">
+    <header class="section-header">
+      <div class="title">
+        <span class="pill accent">Focus station</span>
+        <h3>{{ station.name }}</h3>
+        @if (station.region) {
+        <span class="subtle">{{ station.region }}</span>
+        }
+      </div>
+      <div class="meta">
+        <span class="meta-item">
+          <mat-icon fontIcon="place" />
+          <span
+            >{{ station.latitude | number : "1.2-2" }},
+            {{ station.longitude | number : "1.2-2" }}</span
+          >
+        </span>
+      </div>
+    </header>
+
+    <div class="station-grid">
+      @for (metric of stationMetrics(); track metric.label) {
+      <div class="station-metric">
+        <mat-icon [fontIcon]="metric.icon" />
+        <div>
+          <span class="label">{{ metric.label }}</span>
+          <span class="value">{{ metric.value }}</span>
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+  } @if (today(); as today) {
+  <section class="panel-section today-section">
+    <header class="section-header">
+      <div class="title">
+        <span class="pill">Today's outlook</span>
+        <h2>Atmospheric snapshot</h2>
+      </div>
+      @if (today.sunrise && today.sunset) {
+      <div class="meta">
+        <span class="meta-item">
+          <mat-icon fontIcon="wb_sunny" />
+          <span
+            >{{ today.sunrise | date : "shortTime" }} -
+            {{ today.sunset | date : "shortTime" }}</span
+          >
+        </span>
+      </div>
+      }
+    </header>
+
+    @if (today.summary) {
+    <p class="summary">{{ today.summary }}</p>
+    }
+
+    <div class="today-metrics">
+      <div class="metric">
+        <span class="metric-label">Avg temperature</span>
+        <span class="metric-value">
+          @if (today.averageTemperature !== null && today.averageTemperature !==
+          undefined) {
+          {{ today.averageTemperature | number : "1.0-1" }}&deg;C } @else { -- }
+        </span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Min / Max</span>
+        <span class="metric-value">
+          @if (today.minTemperature !== null && today.maxTemperature !== null &&
+          today.minTemperature !== undefined && today.maxTemperature !==
+          undefined) {
+          {{ today.minTemperature | number : "1.0-0" }}&deg; /
+          {{ today.maxTemperature | number : "1.0-0" }}&deg; } @else { -- }
+        </span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Wind speed</span>
+        <span class="metric-value">
+          @if (today.averageWindSpeed !== null && today.averageWindSpeed !==
+          undefined) {
+          {{ today.averageWindSpeed | number : "1.0-1" }} m/s } @else { -- }
+        </span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Stations online</span>
+        <span class="metric-value accent">{{ today.stationCount }}</span>
+      </div>
+    </div>
+
+    @if (detailedHtml(); as detail) {
+    <mat-divider></mat-divider>
+    <mat-accordion class="detail-accordion">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Detailed outlook</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="detail" [innerHTML]="detail"></div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    }
+  </section>
+  }
+</div>

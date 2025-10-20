@@ -1,0 +1,229 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.map-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+}
+
+.map-canvas {
+  height: 100%;
+  width: 100%;
+}
+
+.map-overlay {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.93);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1f2937;
+}
+
+.legend-bar {
+  width: 140px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.temperature-bar {
+  background: linear-gradient(90deg, #2563eb 0%, #60a5fa 35%, #facc15 70%, #ef4444 100%);
+}
+
+.wind-bar {
+  background: linear-gradient(90deg, #0ea5e9 0%, #38bdf8 45%, #22c55e 80%, #166534 100%);
+}
+
+.pressure-bar {
+  background: linear-gradient(90deg, #1d4ed8 0%, #38bdf8 35%, #facc15 65%, #ef4444 100%);
+}
+
+.loading-mask {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: #1f2937;
+  z-index: 1500;
+  text-align: center;
+}
+
+.loading-mask p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+:host ::ng-deep .leaflet-container {
+  background: #f9fafb;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+:host ::ng-deep .leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 0.65rem 0 0 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+:host ::ng-deep .map-updated-time {
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.weather-marker {
+  transition: transform 200ms ease, filter 200ms ease;
+}
+
+.weather-marker.is-selected {
+  transform: scale(1.12);
+  filter: drop-shadow(0 12px 22px rgba(59, 130, 246, 0.35));
+}
+
+.marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: #0f172a;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.65);
+}
+
+.temperature-marker.flag-mode {
+  width: 64px;
+  height: 44px;
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  align-items: center;
+  column-gap: 6px;
+}
+
+.temperature-marker.flag-mode .flag-pole {
+  width: 2px;
+  height: 36px;
+  background: rgba(30, 41, 59, 0.35);
+  border-radius: 999px;
+  justify-self: center;
+}
+
+.temperature-marker.flag-mode .flag-body {
+  min-width: 48px;
+  padding: 6px 10px;
+  border-radius: 12px 16px 16px 12px;
+  background: linear-gradient(125deg, color-mix(in srgb, var(--marker-color, #38bdf8) 75%, #ffffff 25%), rgba(15, 23, 42, 0.06));
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.18);
+}
+
+.style-flag .marker-value {
+  font-size: 0.86rem;
+  text-shadow: none;
+  color: #0f172a;
+}
+
+.wind-marker {
+  width: 62px;
+  height: 62px;
+}
+
+.wind-marker .wind-arrow {
+  width: 10px;
+  height: 34px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(14, 165, 233, 0.15), rgba(14, 165, 233, 0.75));
+  transform-origin: center 90%;
+  transform: rotate(var(--wind-rotation, 0deg));
+  position: relative;
+  /* Slightly accelerate sway for stronger winds */
+  animation: wind-pulse calc(2.8s - min(var(--wind-speed, 0) * 0.11s, 1.6s)) ease-in-out infinite;
+}
+
+.wind-marker .wind-arrow::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: linear-gradient(120deg, rgba(14, 165, 233, 0.9), rgba(56, 189, 248, 0.65));
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.25);
+}
+
+.pressure-marker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pressure-circle {
+  width: var(--bubble-size, 44px);
+  height: var(--bubble-size, 44px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 25%,
+    rgba(255, 255, 255, 0.92),
+    color-mix(in srgb, var(--bubble-color, #60a5fa) 78%, rgba(255, 255, 255, 0) 22%)
+  );
+  border: 1px solid color-mix(in srgb, var(--bubble-color, #60a5fa) 55%, rgba(15, 23, 42, 0.15) 45%);
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--bubble-color, #60a5fa) 35%, rgba(0, 0, 0, 0.08) 65%);
+  transition: width 280ms ease, height 280ms ease, box-shadow 280ms ease;
+}
+
+:host ::ng-deep .temperature-pane,
+:host ::ng-deep .wind-pane,
+:host ::ng-deep .pressure-pane {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+:host ::ng-deep .active-pane {
+  opacity: 1;
+}
+
+@keyframes wind-pulse {
+  0%,
+  100% {
+    transform: rotate(calc(var(--wind-rotation, 0deg) - 6deg));
+  }
+  50% {
+    transform: rotate(calc(var(--wind-rotation, 0deg) + 6deg));
+  }
+}

@@ -1,0 +1,33 @@
+<div class="map-wrapper" [class.is-loading]="loading()">
+  <div #mapCanvas class="map-canvas" [attr.data-layer]="measurement()"></div>
+
+  <div class="map-overlay">
+    @switch (measurement()) { @case ('temperature') { @if (temperatureRange();
+    as range) {
+    <div class="legend temperature">
+      <span>{{ range[0] | number : "1.0-0" }}&deg;C</span>
+      <div class="legend-bar temperature-bar"></div>
+      <span>{{ range[1] | number : "1.0-0" }}&deg;C</span>
+    </div>
+    } } @case ('wind') { @if (windRange(); as range) {
+    <div class="legend wind">
+      <span>{{ range[0] | number : "1.0-0" }} m/s</span>
+      <div class="legend-bar wind-bar"></div>
+      <span>{{ range[1] | number : "1.0-0" }} m/s</span>
+    </div>
+    } } @case ('pressure') { @if (pressureRange(); as range) {
+    <div class="legend pressure">
+      <span>{{ range[0] | number : "1.0-0" }} hPa</span>
+      <div class="legend-bar pressure-bar"></div>
+      <span>{{ range[1] | number : "1.0-0" }} hPa</span>
+    </div>
+    } } }
+  </div>
+
+  @if (loading() && !hasData()) {
+  <div class="loading-mask">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading live weather…</p>
+  </div>
+  }
+</div>

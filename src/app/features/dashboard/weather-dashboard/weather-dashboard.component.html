@@ -1,0 +1,95 @@
+<div class="dashboard-shell">
+  @if (isLoading()) {
+  <mat-progress-bar mode="indeterminate" color="accent" />
+  }
+
+  <div class="content-grid">
+    <section class="map-area">
+      @if (forecast().length) {
+      <section class="forecast-bar" aria-label="Five day forecast">
+        <div class="forecast-header">
+          <span class="forecast-title">5-Day Outlook</span>
+        </div>
+        <div class="forecast-days">
+          @for (day of forecast() | slice:0:5; track day.day) {
+          <div class="forecast-day">
+            <div class="day-name">
+              {{ day.day | date : "EEE" }}
+              @if (day.icon) {
+              <img
+                class="day-icon"
+                [src]="day.icon"
+                [alt]="day.weatherDescription || ''"
+                loading="lazy"
+              />
+              }
+            </div>
+            <div class="day-info">
+              <div class="day-temps">
+                <span class="temp-low">
+                  @if (day.minTemperature !== null && day.minTemperature !==
+                  undefined) {
+                  {{ day.minTemperature | number : "1.0-0" }}&deg; } @else { — }
+                </span>
+                <span class="temp-high">
+                  @if (day.maxTemperature !== null && day.maxTemperature !==
+                  undefined) {
+                  {{ day.maxTemperature | number : "1.0-0" }}&deg; } @else { — }
+                </span>
+              </div>
+              @if (day.rainChance !== null && day.rainChance !== undefined &&
+              day.rainChance > 0) {
+              <div class="day-rain">
+                <mat-icon fontIcon="water_drop" />
+                <span>{{ day.rainChance }}%</span>
+              </div>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </section>
+      }
+
+      <div class="map-stage">
+        <div class="floating-chips-container">
+          @for (option of measurementOptions; track option.value) {
+          <button
+            type="button"
+            class="floating-chip"
+            [class.active]="measurement() === option.value"
+            (click)="handleMeasurementChange(option.value)"
+            [matTooltip]="option.label"
+            matTooltipPosition="below"
+            [attr.aria-label]="option.label"
+            [attr.aria-pressed]="measurement() === option.value"
+          >
+            <mat-icon [fontIcon]="option.icon" class="chip-icon" />
+            <span class="chip-label">{{ option.label }}</span>
+          </button>
+          }
+        </div>
+
+        <app-weather-map
+          [stations]="stations()"
+          [measurement]="measurement()"
+          [selectedStationId]="selectedStationId()"
+          [loading]="isLoading()"
+          [lastUpdated]="lastUpdated()"
+          temperaturePrototype="glow"
+          temperatureMarkerStyle="flag"
+          (stationSelected)="handleStationSelected($event)"
+        />
+      </div>
+    </section>
+
+    <section class="panel-area">
+      <app-weather-panel
+        [todayData]="today()"
+        [selectedStationData]="selectedStation()"
+        [measurementLayer]="measurement()"
+        [lastUpdatedAt]="lastUpdated()"
+      />
+    </section>
+  </div>
+</div>

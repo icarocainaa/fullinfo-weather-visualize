@@ -1,0 +1,396 @@
+.dashboard-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+  padding: 2rem;
+  background: #f5f7fb;
+  color: #1f2937;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.5fr) minmax(280px, 0.9fr);
+  gap: 1.5rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.map-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 520px;
+}
+
+.map-stage {
+  position: relative;
+  flex: 1;
+  min-height: 420px;
+  display: flex;
+}
+
+.map-stage app-weather-map {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 5-Day Forecast Bar - Minimalist Design */
+.forecast-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 0.9rem;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.forecast-header {
+  display: flex;
+  align-items: center;
+}
+
+.forecast-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+}
+
+.forecast-days {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+}
+
+.forecast-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.5rem;
+  border-radius: 0.65rem;
+  background: transparent;
+  transition: all 180ms ease;
+}
+
+.forecast-day:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.day-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #475569;
+}
+
+.day-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(59, 130, 246, 0.15));
+}
+
+.day-icon-placeholder {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  color: #cbd5e1;
+}
+
+.day-temps {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.temp-high {
+  font-size: 0.95rem;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.temp-low {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  letter-spacing: -0.01em;
+}
+
+.day-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.day-rain {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.1);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #0891b2;
+}
+
+.day-rain mat-icon {
+  font-size: 12px;
+  width: 12px;
+  height: 12px;
+  color: #0891b2;
+}
+
+@media (min-width: 1360px) {
+  .forecast-days {
+    gap: 1rem;
+  }
+
+  .forecast-day {
+    padding: 0.75rem 0.65rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .forecast-bar {
+    padding: 0.85rem 1rem;
+  }
+
+  .forecast-days {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .forecast-days::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .forecast-days::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 999px;
+  }
+}
+
+@media (max-width: 640px) {
+  .forecast-days {
+    grid-template-columns: repeat(5, minmax(85px, 1fr));
+  }
+
+  .day-icon {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Floating Chips - Minimal Design */
+.floating-chips-container {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 0.65rem;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.floating-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12),
+              0 1px 3px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.floating-chip .chip-icon {
+  flex-shrink: 0;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0;
+}
+
+.floating-chip .chip-label {
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #1e293b;
+  white-space: nowrap;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover State - Expand and show label */
+.floating-chip:hover {
+  width: auto;
+  padding-left: 0.75rem;
+  padding-right: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15),
+              0 2px 6px rgba(15, 23, 42, 0.1);
+  transform: translateY(-2px);
+}
+
+.floating-chip:hover .chip-icon {
+  color: #3b82f6;
+  margin-right: 0.5rem;
+}
+
+.floating-chip:hover .chip-label {
+  max-width: 150px;
+  opacity: 1;
+}
+
+/* Active State */
+.floating-chip.active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 0.95));
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35),
+              0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.floating-chip.active .chip-icon {
+  color: #ffffff;
+}
+
+.floating-chip.active .chip-label {
+  color: #ffffff;
+}
+
+/* Active + Hover State */
+.floating-chip.active:hover {
+  width: auto;
+  padding-left: 0.75rem;
+  padding-right: 1rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 1), rgba(37, 99, 235, 1));
+  box-shadow: 0 10px 32px rgba(59, 130, 246, 0.45),
+              0 4px 12px rgba(37, 99, 235, 0.35);
+  transform: translateY(-2px);
+}
+
+.floating-chip.active:hover .chip-icon {
+  margin-right: 0.5rem;
+}
+
+.floating-chip.active:hover .chip-label {
+  max-width: 150px;
+  opacity: 1;
+}
+
+/* Focus State for Accessibility */
+.floating-chip:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.6);
+  outline-offset: 2px;
+}
+
+/* Press/Active Animation */
+.floating-chip:active {
+  transform: translateY(-1px) scale(0.96);
+}
+
+.panel-area {
+  height: calc(100vh - 4rem); /* fill viewport minus shell vertical padding (2rem top + 2rem bottom) */
+  min-height: 520px;
+}
+
+@media (max-width: 1280px) {
+  .dashboard-shell {
+    padding: 1.5rem;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .map-area {
+    min-height: 460px;
+  }
+
+  .map-stage {
+    min-height: 360px;
+  }
+
+  .floating-chips-container {
+    position: static;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+    transform: none;
+    left: auto;
+    justify-content: center;
+  }
+
+  .floating-chip {
+    width: auto;
+    padding: 0.5rem 1rem;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .floating-chip .chip-icon {
+    position: static;
+    transform: none;
+    margin-right: 0.4rem;
+  }
+
+  .floating-chip .chip-label {
+    position: static;
+    opacity: 1;
+  }
+
+  .floating-chip:hover {
+    padding: 0.5rem 1rem;
+    transform: scale(1.02);
+  }
+
+  .floating-chip:hover .chip-icon {
+    left: auto;
+    transform: none;
+  }
+
+  .floating-chip.active:hover {
+    padding: 0.5rem 1rem;
+    transform: scale(1.05);
+  }
+
+  .panel-area {
+    height: auto;
+  }
+
+  .map-forecast-strip {
+    padding: 0.65rem 0.85rem;
+  }
+}
+
+
+
