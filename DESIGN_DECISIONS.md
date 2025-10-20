@@ -15,14 +15,18 @@ This document outlines the design thinking and technical decisions made during t
 ## Design Philosophy: Minimalism with Purpose
 
 ### Chosen Direction
+
 I adopted a **minimalist, data-focused design** that prioritizes:
+
 - **Clarity over decoration** - Remove visual noise to let weather data shine
 - **Progressive disclosure** - Show essential info first, details on demand
 - **Spatial efficiency** - Maximize map visibility while keeping controls accessible
 - **Modern aesthetics** - Glass morphism, subtle shadows, smooth animations
 
 ### Why This Approach?
+
 Weather dashboards often suffer from information overload. My goal was to create a **calm, scannable interface** where users can:
+
 1. Quickly understand current conditions at a glance
 2. Explore spatial patterns without distraction
 3. Drill into specific stations when needed
@@ -32,10 +36,12 @@ Weather dashboards often suffer from information overload. My goal was to create
 ## Map Visualization: Learning Process
 
 ### First-time Map Development
+
 This was my **first experience developing interactive map visualizations**. My learning process:
+
 - Studied existing weather maps (Windy.com, Weather.com, Ventusky)
 - Reviewed Leaflet documentation and examples
-- Explored Turf.js capabilities for geospatial analysis
+- Explored Canvas API for custom rendering
 - Experimented with different rendering techniques
 
 ### Visualization Experiments
@@ -43,13 +49,14 @@ This was my **first experience developing interactive map visualizations**. My l
 Before arriving at the final design, I tested several approaches:
 
 **Temperature Visualizations:**
-- ❌ **Contour field** (Voronoi + isolines) - Too visually busy
-- ❌ **Hex clusters** - Lost station-level detail
-- ❌ **Triangulated mesh** (Delaunay) - CPU-intensive, complex
-- ❌ **GPU shader** (WebGL IDW) - Similar result without the aesthetic benefits
-- ✅ **Glowing blur (final)** - Soft, visually appealing, performant
+
+- ❌ **Heatmap overlay** - Standard but lacks visual appeal
+- ❌ **Contour lines** - Too technical, visually busy
+- ❌ **Simple color dots** - Worked but didn't show smooth gradients
+- ✅ **Radial glow (final)** - Canvas gradients that blend naturally, soft and visually appealing
 
 **Marker Styles:**
+
 - ❌ **Classic halo badge** - Generic, low contrast with glow
 - ❌ **Thermometer bar** - Cluttered when stations overlap
 - ✅ **Flag label (final)** - Distinctive, readable, preserves map context
@@ -83,6 +90,7 @@ return [midPoint - 5, midPoint + 5];
 ```
 
 **Benefits:**
+
 - ✅ **Visual differentiation** - Regions show meaningful color variation
 - ✅ **Proportional context** - Color intensity reflects actual significance
 - ✅ **Prevents misinterpretation** - 1°C difference doesn't look like 10°C
@@ -94,11 +102,13 @@ return [midPoint - 5, midPoint + 5];
 ### Floating Chips (Visualization Selector)
 
 **Evolution:**
+
 1. Started with a card overlay (too bulky, obstructed map)
 2. Moved to floating minimalist chips (clean, space-efficient)
 3. Added expand-on-hover behavior (progressive disclosure)
 
 **Final Design:**
+
 - Circular chips (44px) showing only icons
 - Expand horizontally on hover to reveal labels
 - Positioned centrally at map top (balanced, discoverable)
@@ -111,6 +121,7 @@ return [midPoint - 5, midPoint + 5];
 **Challenge:** Show 5 days of data without dominating the interface
 
 **Iterations:**
+
 1. Card-based layout (too heavy, inconsistent with minimalist theme)
 2. Ultra-compact single line (too cramped, readability issues)
 3. **Two-line layout (final)** - Name+Icon / Temps+Rain
@@ -122,6 +133,7 @@ return [midPoint - 5, midPoint + 5];
 **Problem:** Original design felt overwhelming with too many visual elements
 
 **Changes Made:**
+
 - Removed individual card borders → Single unified panel
 - Removed colored pills/badges → Subtle text labels
 - Changed grid layout → Clean list with dividers
@@ -136,22 +148,27 @@ return [midPoint - 5, midPoint + 5];
 ## Technical Decisions
 
 ### State Management: Signals over NgRx
+
 - **Simpler** - Less boilerplate than traditional state libraries
 - **Performant** - Fine-grained reactivity, better than Zone.js
 - **Modern** - Aligns with Angular's future direction
 
 ### GraphQL over REST
+
 - **Flexible queries** - Request exactly what you need
 - **Real-time** - Subscriptions for live updates
 - **Type safety** - Generated TypeScript types from schema
 
 ### Leaflet over Google Maps
+
 - **Customizable** - Full control over rendering
 - **Lightweight** - Smaller bundle size
 - **Open source** - No API costs or limits
 
 ### Custom Renderers Pattern
+
 Instead of monolithic map code, I created separate renderer classes for each visualization mode. This provides:
+
 - **Separation of concerns** - Each mode has isolated logic
 - **Testability** - Can unit test rendering algorithms
 - **Extensibility** - Easy to add new visualization types
@@ -175,11 +192,13 @@ Instead of monolithic map code, I created separate renderer classes for each vis
 **Philosophy:** Content reflow, not just scaling
 
 **Breakpoints:**
+
 - Desktop (>1280px): Side-by-side layout, chips as floating circles
 - Tablet (768-1280px): Stacked layout, chips remain horizontal
 - Mobile (<768px): Optimized touch targets, scrollable forecast
 
 **Key Adaptations:**
+
 - Chips expand permanently on mobile (no hover)
 - Panel height changes from fixed to auto
 - Forecast allows horizontal scroll when needed
@@ -204,15 +223,19 @@ Small details that improve the experience:
 ## Data Presentation Hierarchy
 
 ### Primary Layer: Map
+
 The map is the hero. Users should see patterns across the country immediately.
 
 ### Secondary Layer: Forecast Strip
+
 Quick reference for upcoming days. Compact but readable.
 
 ### Tertiary Layer: Detail Panel
+
 Deep-dive information for selected stations. Only visible when user shows intent.
 
 ### Quaternary: Metadata
+
 Last updated time, sunrise/sunset - important but not focal, positioned at edges.
 
 ---
@@ -232,18 +255,22 @@ Last updated time, sunrise/sunset - important but not focal, positioned at edges
 ## Challenges & Solutions
 
 ### Challenge 1: Map Overlay Positioning
+
 **Problem:** Controls fighting with map elements for space  
 **Solution:** Chips at top center, legend at bottom left, timestamp at bottom right - each corner has clear ownership
 
 ### Challenge 2: Temperature Color Perception
+
 **Problem:** How to make temperature differences visually meaningful?  
 **Solution:** Centered range with consistent padding maintains proportional color relationships
 
 ### Challenge 3: Information Density
+
 **Problem:** Too much data creates cognitive overload  
 **Solution:** Progressive disclosure - show essentials, reveal details on interaction
 
 ### Challenge 4: First-time Map Development
+
 **Problem:** No prior experience with geospatial visualizations  
 **Solution:** Research-driven approach - studied existing solutions, experimented with multiple techniques, iterated based on results
 
@@ -252,19 +279,23 @@ Last updated time, sunrise/sunset - important but not focal, positioned at edges
 ## Reflection
 
 ### What Went Well
+
 ✅ Successfully implemented complex map visualizations without prior experience  
 ✅ Created a cohesive, minimalist design system  
 ✅ Balanced data density with visual clarity  
 ✅ Built fully reactive architecture with signals
 
 ### What I Learned
-- Geospatial algorithms (Voronoi, interpolation, coordinate systems)
+
+- Leaflet map API and custom overlay creation
 - Canvas-based rendering techniques for performance
 - Color theory in data visualization (perceptual color scales)
+- Coordinate systems and map projections
 - The importance of progressive disclosure in dense UIs
 - How to learn complex new domains (maps) through research and iteration
 
 ### Design Principles Applied
+
 1. **Less is more** - Remove until it breaks, then add back one element
 2. **Data > Decoration** - Every pixel should serve the user's goal
 3. **Consistency** - Unified patterns create predictable experiences
@@ -276,6 +307,7 @@ Last updated time, sunrise/sunset - important but not focal, positioned at edges
 ## Conclusion
 
 This project demonstrates my approach to building user interfaces:
+
 - **Research-driven** - Study domain before implementing
 - **Iterative** - Try multiple solutions, pick the best
 - **User-focused** - Design for clarity and usability
@@ -286,5 +318,4 @@ The final dashboard is clean, performant, and focused on helping users understan
 
 ---
 
-*"Good design is as little design as possible." - Dieter Rams*
-
+_"Good design is as little design as possible." - Dieter Rams_

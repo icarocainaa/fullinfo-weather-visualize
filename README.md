@@ -26,10 +26,10 @@ This application provides a comprehensive weather monitoring system that:
 - **Framework**: Angular 19 (Standalone Components)
 - **State Management**: Signals-based reactive store
 - **UI Components**: Angular Material 19
-- **Map Engine**: Leaflet with custom renderers
+- **Map Engine**: Leaflet with custom Canvas renderers
 - **Data Layer**: Apollo GraphQL Client
 - **Styling**: SCSS with modern CSS features (backdrop-filter, gradients)
-- **Geospatial**: Turf.js for geographic calculations
+- **Color Scaling**: D3-scale for temperature/pressure gradients
 
 ### Backend
 
@@ -43,9 +43,9 @@ This application provides a comprehensive weather monitoring system that:
 ```json
 {
   "leaflet": "Interactive maps with custom overlays",
-  "turf.js": "Geospatial analysis (voronoi, interpolation)",
-  "d3-scale": "Color scaling for temperature/pressure",
-  "apollo-client": "GraphQL data fetching",
+  "d3-scale": "Color scaling for temperature/pressure gradients",
+  "apollo-client": "GraphQL data fetching with subscriptions",
+  "graphql-yoga": "GraphQL server with real-time support",
   "rxjs": "Reactive programming patterns"
 }
 ```
@@ -60,20 +60,22 @@ Three distinct rendering modes with custom implementations:
 
 - **Temperature (Glow Mode)**:
 
-  - Voronoi tessellation for spatial interpolation
-  - Color-coded gradients (blue → cyan → yellow → red)
+  - Radial Canvas gradients creating smooth color blending
+  - Color-coded scale (blue → cyan → yellow → red)
   - Flag-style markers with dynamic coloring
+  - Soft glow effect for visual appeal
 
 - **Wind Flow**:
 
   - Animated wind arrows showing direction
-  - Pulsing animation based on wind speed
+  - CSS animations with speed-based timing
+  - Dynamic rotation based on wind direction
   - Visual representation of gusts
 
 - **Air Pressure (Bubble Mode)**:
-  - Sized bubbles representing pressure levels
+  - Variable-sized bubbles representing pressure levels
   - Color-coded from low (blue) to high (red)
-  - Spatial distribution visualization
+  - Size scales proportionally with pressure values
 
 ### 2. **Floating Chips Navigation**
 
